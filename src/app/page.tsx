@@ -8,7 +8,7 @@ export default async function HomePage() {
   })
 
   if (!session) {
-    redirect('/login')
+    redirect('/auth/login')
   }
 
   return <div>Home Page</div>
