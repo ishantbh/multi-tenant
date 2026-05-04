@@ -48,9 +48,11 @@ export function RegisterForm() {
     const result = await registerAction(data)
 
     if (result.success) {
-      toast.success('Successfully created account')
+      toast.success(
+        'Successfully created account!\nPlease login with your credentials',
+      )
 
-      router.replace('/')
+      router.replace('/auth/login')
     } else {
       toast.error(result.error)
     }
