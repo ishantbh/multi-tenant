@@ -23,6 +23,7 @@ import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 export function LoginForm() {
   const [isPending, setIsPending] = useState(false)
@@ -43,11 +44,11 @@ export function LoginForm() {
     const result = await loginAction(data)
 
     if (result.success) {
-      console.log('Successfully logged in')
+      toast.success('Successfully logged in')
 
       router.replace('/')
     } else {
-      console.log(result.error)
+      toast.error(result.error)
     }
 
     setIsPending(false)

@@ -1,10 +1,8 @@
+import { ThemeProvider } from '@/components/ui/theme/theme-provider'
+import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
 import { Geist_Mono, Inter } from 'next/font/google'
-
-import { cn } from '@/lib/utils'
-
-import { ThemeProvider } from '@/components/ui/theme/theme-provider'
-
+import { Toaster } from 'sonner'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
@@ -44,6 +42,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <Toaster richColors closeButton />
       </body>
     </html>
   )
