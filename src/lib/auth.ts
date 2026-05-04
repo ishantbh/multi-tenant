@@ -13,5 +13,21 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [organization(), nextCookies()],
+  plugins: [
+    organization({
+      schema: {
+        organization: {
+          additionalFields: {
+            isPersonal: {
+              type: 'boolean',
+              input: false,
+              required: false,
+              defaultValue: false,
+            },
+          },
+        },
+      },
+    }),
+    nextCookies(),
+  ],
 })
