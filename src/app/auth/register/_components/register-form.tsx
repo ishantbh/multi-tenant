@@ -17,8 +17,8 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { loginAction } from '@/lib/actions/auth'
-import { type LoginInput, loginSchema } from '@/lib/validation/auth'
+import { registerAction } from '@/lib/actions/auth'
+import { type RegisterInput, registerSchema } from '@/lib/validation/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
@@ -27,26 +27,28 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export function LoginForm() {
+export function RegisterForm() {
   const [isPending, setIsPending] = useState(false)
 
   const router = useRouter()
 
-  const form = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   })
 
-  async function onSubmit(data: LoginInput) {
+  async function onSubmit(data: RegisterInput) {
     setIsPending(true)
 
-    const result = await loginAction(data)
+    const result = await registerAction(data)
 
     if (result.success) {
-      toast.success('Successfully logged in')
+      toast.success('Successfully created account')
 
       router.replace('/')
     } else {
@@ -59,17 +61,38 @@ export function LoginForm() {
   return (
     <Card className='w-full sm:max-w-md'>
       <CardHeader>
-        <CardTitle>Welcome Back!</CardTitle>
-        <CardDescription>Login to your account to continue.</CardDescription>
+        <CardTitle>Welcome!</CardTitle>
+        <CardDescription>Create a new account to continue.</CardDescription>
         <CardAction>
           <Button variant='outline' asChild>
-            <Link href='/auth/register'>Register</Link>
+            <Link href='/auth/login'>Login</Link>
           </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form id='login-form' onSubmit={form.handleSubmit(onSubmit)}>
+        <form id='register-form' onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
+            <Controller
+              name='name'
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='name'>Name</FieldLabel>
+                  <Input
+                    {...field}
+                    id='name'
+                    type='text'
+                    aria-invalid={fieldState.invalid}
+                    placeholder='John Doe'
+                    required
+                    disabled={isPending}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
             <Controller
               name='email'
               control={form.control}
@@ -104,6 +127,30 @@ export function LoginForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder='••••••••'
                     required
+                    minLength={8}
+                    disabled={isPending}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name='confirmPassword'
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='confirm-password'>
+                    Confirm Password
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id='confirm-password'
+                    type='password'
+                    aria-invalid={fieldState.invalid}
+                    placeholder='••••••••'
+                    required
                     disabled={isPending}
                   />
                   {fieldState.invalid && (
@@ -117,14 +164,14 @@ export function LoginForm() {
       </CardContent>
       <CardFooter>
         <Field>
-          <Button type='submit' form='login-form' disabled={isPending}>
+          <Button type='submit' form='register-form' disabled={isPending}>
             {isPending ? (
               <>
                 <Loader2 className='size-4 animate-spin' />
-                <span>Logging in...</span>
+                <span>Registering...</span>
               </>
             ) : (
-              <span>Login</span>
+              <span>Register</span>
             )}
           </Button>
         </Field>
