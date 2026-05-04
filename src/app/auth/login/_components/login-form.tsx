@@ -1,5 +1,6 @@
 'use client'
 
+import { loginAction } from '@/app/auth/actions'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -18,9 +19,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { type LoginInput, loginSchema } from '@/lib/validation/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 export function LoginForm() {
+  const [isPending, setIsPending] = useState(false)
+
+  const router = useRouter()
+
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,9 +37,20 @@ export function LoginForm() {
     },
   })
 
-  function onSubmit(data: LoginInput) {
-    console.log(data)
-    // TODO: Login
+  async function onSubmit(data: LoginInput) {
+    setIsPending(true)
+
+    const result = await loginAction(data)
+
+    if (result.success) {
+      console.log('Successfully logged in')
+
+      router.replace('/')
+    } else {
+      console.log(result.error)
+    }
+
+    setIsPending(false)
   }
 
   return (
@@ -56,6 +75,7 @@ export function LoginForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder='m@example.com'
                     required
+                    disabled={isPending}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -76,6 +96,7 @@ export function LoginForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder='••••••••'
                     required
+                    disabled={isPending}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -87,8 +108,15 @@ export function LoginForm() {
         </form>
       </CardContent>
       <CardFooter>
-        <Button type='submit' form='login-form'>
-          Login
+        <Button type='submit' form='login-form' disabled={isPending}>
+          {isPending ? (
+            <>
+              <Loader2 className='size-4 animate-spin' />
+              <span>Logging in...</span>
+            </>
+          ) : (
+            <span>Login</span>
+          )}
         </Button>
       </CardFooter>
     </Card>
