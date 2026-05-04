@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { Header } from './_components/header'
 
 export default async function ProtectedLayout({
   children,
@@ -15,5 +16,10 @@ export default async function ProtectedLayout({
     redirect('/auth/login')
   }
 
-  return children
+  return (
+    <div className='flex-1 flex flex-col'>
+      <Header />
+      <main className='flex-1 flex flex-col p-4'>{children}</main>
+    </div>
+  )
 }
