@@ -4,11 +4,9 @@ import { auth } from '@/lib/auth'
 import { loginSchema, type LoginInput } from '@/lib/validation/auth'
 import { headers } from 'next/headers'
 
-type ActionResult = { success: true } | { success: false; error: string }
+export type ActionResult = { success: true } | { success: false; error: string }
 
 export async function loginAction(data: LoginInput): Promise<ActionResult> {
-  await new Promise((resolve) => setTimeout(resolve, 3000))
-
   const parsed = loginSchema.safeParse(data)
 
   if (!parsed.success) {
@@ -33,6 +31,23 @@ export async function loginAction(data: LoginInput): Promise<ActionResult> {
     return {
       success: false,
       error: err instanceof Error ? err.message : 'Error logging in',
+    }
+  }
+}
+
+export async function logoutAction(): Promise<ActionResult> {
+  try {
+    const reqHeaders = await headers()
+
+    await auth.api.signOut({
+      headers: reqHeaders,
+    })
+
+    return { success: true }
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Error logging out',
     }
   }
 }

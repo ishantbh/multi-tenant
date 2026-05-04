@@ -1,6 +1,5 @@
 'use client'
 
-import { loginAction } from '@/app/auth/actions'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,6 +16,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { loginAction } from '@/lib/actions/auth'
 import { type LoginInput, loginSchema } from '@/lib/validation/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
