@@ -71,20 +71,3 @@ export async function registerAction(
     }
   }
 }
-
-export async function logoutAction(): Promise<ActionResult> {
-  try {
-    const reqHeaders = await headers()
-
-    await auth.api.signOut({
-      headers: reqHeaders,
-    })
-
-    return { success: true }
-  } catch (err) {
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : 'Error logging out',
-    }
-  }
-}
