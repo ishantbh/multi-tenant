@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { loginAction } from '@/lib/actions/auth'
+import { authClient } from '@/lib/auth-client'
 import { type LoginInput, loginSchema } from '@/lib/validation/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
@@ -31,6 +32,8 @@ export function LoginForm() {
   const [isPending, setIsPending] = useState(false)
 
   const router = useRouter()
+
+  const { refetch } = authClient.useSession()
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -47,6 +50,8 @@ export function LoginForm() {
 
     if (result.success) {
       toast.success('Successfully logged in')
+
+      await refetch()
 
       router.replace('/')
     } else {
