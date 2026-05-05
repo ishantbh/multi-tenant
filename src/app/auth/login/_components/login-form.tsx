@@ -34,6 +34,7 @@ export function LoginForm() {
   const router = useRouter()
 
   const { refetch } = authClient.useSession()
+  const { refetch: refetchOrgs } = authClient.useListOrganizations()
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -51,7 +52,9 @@ export function LoginForm() {
     if (result.success) {
       toast.success('Successfully logged in')
 
-      await refetch()
+      // Refetch both the session and organizations
+      // refetching just the session will not update the organizations
+      await Promise.all([refetch(), refetchOrgs()])
 
       router.replace('/')
     } else {
