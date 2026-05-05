@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { authClient } from '@/lib/auth-client'
 import { getInitials } from '@/lib/utils'
+import { LogOutIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -61,7 +62,8 @@ export function UserAvatar() {
             onClick={handleLogout}
             title='Logout'
           >
-            Logout
+            <span>Logout</span>
+            <LogOutIcon className='size-4' />
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
