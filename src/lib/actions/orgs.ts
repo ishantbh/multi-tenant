@@ -23,6 +23,7 @@ export async function createOrgAction(
       body: {
         name,
         slug,
+        keepCurrentActiveOrganization: true,
       },
       headers: reqHeaders,
     })
