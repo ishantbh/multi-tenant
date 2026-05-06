@@ -10,8 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { authClient } from '@/lib/auth-client'
-import { ChevronsUpDownIcon, PlusIcon } from 'lucide-react'
+import { ChevronsUpDownIcon } from 'lucide-react'
 import { toast } from 'sonner'
+import { CreateOrganization } from './create-organization'
 
 export function OrganizationSwitcher() {
   const { data: activeOrganization } = authClient.useActiveOrganization()
@@ -48,7 +49,7 @@ export function OrganizationSwitcher() {
           <ChevronsUpDownIcon className='ml-auto' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='w-50'>
         <DropdownMenuLabel className='text-xs text-muted-foreground'>
           Workspaces
         </DropdownMenuLabel>
@@ -62,13 +63,8 @@ export function OrganizationSwitcher() {
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className='gap-2 p-2'>
-          <div className='flex size-6 items-center justify-center rounded-md border bg-transparent'>
-            <PlusIcon className='size-4' />
-          </div>
-          <div className='font-medium text-muted-foreground'>
-            Create workspace
-          </div>
+        <DropdownMenuItem asChild>
+          <CreateOrganization />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
