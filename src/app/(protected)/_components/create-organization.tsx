@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { PlusIcon } from 'lucide-react'
 import { useState } from 'react'
+import { CreateOrganizationForm } from './create-organization-form'
 
 export function CreateOrganization() {
   const [open, setOpen] = useState(false)
@@ -32,7 +33,7 @@ export function CreateOrganization() {
             Create a new workspace, invite members, and start collaborating.
           </DialogDescription>
         </DialogHeader>
-        {/* TODO: Add form */}
+        <CreateOrganizationForm close={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   )
