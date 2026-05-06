@@ -7,9 +7,8 @@ import {
   type LoginInput,
   type RegisterInput,
 } from '@/lib/validation/auth'
+import { ActionResult } from '@/types'
 import { headers } from 'next/headers'
-
-export type ActionResult = { success: true } | { success: false; error: string }
 
 export async function loginAction(data: LoginInput): Promise<ActionResult> {
   const parsed = loginSchema.safeParse(data)
