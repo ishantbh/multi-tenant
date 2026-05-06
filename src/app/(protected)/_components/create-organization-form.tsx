@@ -22,6 +22,7 @@ type Props = {
 
 export function CreateOrganizationForm({ close }: Props) {
   const { refetch } = authClient.useListOrganizations()
+
   const form = useForm<CreateOrgInput>({
     resolver: zodResolver(createOrgSchema),
     defaultValues: {

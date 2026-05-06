@@ -10,7 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { authClient } from '@/lib/auth-client'
-import { ChevronsUpDownIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { CreateOrganization } from './create-organization'
 
@@ -40,7 +41,7 @@ export function OrganizationSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline'>
+        <Button variant='outline' className='w-48'>
           <div className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>
               {activeOrganization?.name ?? 'Select Workspace'}
@@ -53,19 +54,26 @@ export function OrganizationSwitcher() {
         <DropdownMenuLabel className='text-xs text-muted-foreground'>
           Workspaces
         </DropdownMenuLabel>
-        {organizations?.map((org) => (
-          <DropdownMenuItem
-            key={org.id}
-            onClick={() => setActiveOrg(org.id)}
-            className='gap-2 p-2'
-          >
-            {org.name}
-          </DropdownMenuItem>
-        ))}
+        {organizations?.map((org) => {
+          const isActive = org.id === activeOrganization?.id
+
+          return (
+            <DropdownMenuItem
+              key={org.id}
+              onClick={() => setActiveOrg(org.id)}
+              className={cn('gap-2 p-2', {
+                'bg-primary/10 text-primary': isActive,
+              })}
+            >
+              <div className='w-full flex items-center justify-between gap-2'>
+                <span>{org.name}</span>
+                {isActive && <CheckIcon />}
+              </div>
+            </DropdownMenuItem>
+          )
+        })}
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <CreateOrganization />
-        </DropdownMenuItem>
+        <CreateOrganization />
       </DropdownMenuContent>
     </DropdownMenu>
   )
